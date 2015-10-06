@@ -3,17 +3,42 @@ var amqp = require('amqplib');
 amqp.connect(require('./config.json').amqp.connection_string).then(function(conn) {
   process.once('SIGINT', function() { conn.close(); });
   return conn.createChannel().then(function(ch) {
-    
-    var simpleMessageQueue = ch.assertQueue('queue:simple:hello', {durable: false});
-    
-    simpleMessageQueue = simpleMessageQueue.then(function() {
-      return ch.consume('queue:simple:hello', function(msg) {
-        console.log(" [x] Received '%s'", msg.content.toString());
-      }, {noAck: true});
-    });
-    
-    return simpleMessageQueue.then(function(_consumeOk) {
-      console.log(' [*] Waiting for messages. To exit press CTRL+C');
-    });
+    /**
+     * [simpleMessageQueue description]
+     * @type {[type]}
+     */
+    ch.assertQueue('queue:simple:hello', {durable: false})
+      .then(function() {
+        return ch.consume('queue:simple:hello', function(msg) {
+          console.log(" [x] Received '%s'", msg.content.toString());
+        }, {noAck: true});
+      })
+      .then(function(_consumeOk) {
+        console.log(' [*] Waiting for messages. To exit press CTRL+C');
+      });
+
+    /**
+     * [ackMessageQueue description]
+     * @type {[type]}
+     */
+    ch.assertQueue('queue:ack:hello', {durable: false})
+      .then(function() {
+        ch.prefetch(1);
+        return ch.consume('queue:ack:hello', reply);
+      })
+      .then(function() {
+        console.log(' [x] Awaiting RPC requests');
+      });
+
+    function reply(msg) {
+      var n = parseInt(msg.content.toString());
+      console.log(' [.] Received RPC request', n);
+      ch.sendToQueue(msg.properties.replyTo, 
+        new Buffer('World'),
+        { correlationId: msg.properties.correlationId });
+      ch.ack(msg);
+    }
+
+    return true;
   });
 }).then(null, console.warn);
