@@ -31,8 +31,7 @@ amqp.connect(require('./config.json').amqp.connection_string).then(function(conn
       });
 
     function reply(msg) {
-      var n = parseInt(msg.content.toString());
-      console.log(' [.] Received RPC request', n);
+      console.log(' [.] Received RPC request %s', msg.content.toString());
       ch.sendToQueue(msg.properties.replyTo, 
         new Buffer('World'),
         { correlationId: msg.properties.correlationId });
