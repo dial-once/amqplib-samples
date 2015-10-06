@@ -27,11 +27,11 @@ amqp.connect(require('./config.json').amqp.connection_string).then(function(conn
         return ch.consume('queue:ack:hello', reply);
       })
       .then(function() {
-        console.log(' [x] Awaiting RPC requests');
+        console.log(' [*] Awaiting RPC requests');
       });
 
     function reply(msg) {
-      console.log(' [.] Received RPC request %s', msg.content.toString());
+      console.log(' [x] Received RPC request %s', msg.content.toString());
       ch.sendToQueue(msg.properties.replyTo, 
         new Buffer('World'),
         { correlationId: msg.properties.correlationId });
