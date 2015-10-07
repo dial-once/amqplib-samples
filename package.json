@@ -1,8 +1,8 @@
 {
-  "name": "amqp-tests",
+  "name": "amqp-samples",
   "version": "1.0.0",
   "description": "",
-  "main": "client.js",
+  "main": "service.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
