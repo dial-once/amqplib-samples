@@ -38,6 +38,9 @@ amqp.connect(require('./config.json').amqp.connection_string).then(function(conn
       ch.ack(msg);
     }
 
+    require('./client-simple-message');
+    require('./client-callback');
+
     return true;
   });
 }).then(null, console.warn);

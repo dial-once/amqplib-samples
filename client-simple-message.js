@@ -5,11 +5,11 @@ amqp.connect(require('./config.json').amqp.connection_string).then(function(conn
 
   conn.createChannel().then(function(ch) {
     var msg = 'Hello!';
-    
+
     return ch.assertQueue('queue:simple:hello', {durable: false})
       .then(function() {
         ch.sendToQueue('queue:simple:hello', new Buffer(msg));
-        console.log(" [x] Sent '%s'", msg);
+        console.log(" [x] Sending '%s'", msg);
         return ch.close();
       });
   });
