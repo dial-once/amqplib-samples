@@ -1,0 +1,15 @@
+app:
+  build: .
+  links: 
+  - redis
+  - rabbitmq
+  ports:
+  - "49160:8080"
+redis:
+  image: redis
+  ports:
+  - "6379:6379"
+rabbitmq:
+  image: rabbitmq
+  ports:
+  - "5672:5672"
