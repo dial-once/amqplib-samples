@@ -1,9 +1,8 @@
 var consumerOptions = {
   url: require('./config.json').amqp.connection_string,
-  queue: 'auth:is_auth',
+  queue: 'auth:oauth:is_auth',
   processMessage: function(msg) {
-    console.log('Received:', msg.content);
-    return true;
+    return new Buffer(new Date().toISOString());
   }
 };
 

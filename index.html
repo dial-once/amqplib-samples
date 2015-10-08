@@ -1,0 +1,16 @@
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io('http://localhost:1337');
+  function emit(name, data) {
+    console.log('[.] Sending', data);
+    socket.emit(name, data);
+  }
+
+  socket.on('answer', function (data) {
+    console.log('[x] Got answer from server', data);
+    document.getElementById('answer').value = data;
+  });
+</script>
+<input type="text" value="" id="answer" disabled/><br/>
+<input type="text" value="Input here..." id="input"/>
+<input type="button" value="Send event" onclick="emit('event', this.value)"/>
