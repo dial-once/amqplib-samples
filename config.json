@@ -1,5 +1,5 @@
 {
   "amqp": {
-    "connection_string": "amqp://localhost"
+    "connection_string": "amqp://rabbitmq"
   }
 }
