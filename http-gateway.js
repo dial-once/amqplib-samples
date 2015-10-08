@@ -1,5 +1,4 @@
-var express = require('express');
-var app = express();
+var app = require('http').createServer(handler)
 
 var publisherOptions = {
   replyTimeOutInterval: 10000,
@@ -9,14 +8,14 @@ var publisherOptions = {
 
 var client = require('amqp-rpc-factory').publisher.create(publisherOptions);
 
-app.get('/', function(req, res) {
+function handler(req, res) {
   client.publish(new Buffer('login:password'))
   .then(function(msg) {
-    res.send(msg);
+    res.end(msg);
   })
   .catch(function(err){
-    res.status(501).send(err);
+    res.writeHead(501).end(err);
   });
-});
+}
 
 app.listen(1337);
